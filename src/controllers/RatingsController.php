@@ -2,6 +2,13 @@
 
 use \BaseController;
 
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
+
 use Regulus\Identify\User;
 use Regulus\Identify\Role;
 

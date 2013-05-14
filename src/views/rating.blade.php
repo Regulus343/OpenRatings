@@ -30,15 +30,15 @@ $active  = true;
 
 @endif
 
-{{-- Comments CSS --}}
+{{-- Ratings CSS --}}
 <link type="text/css" rel="stylesheet" href="{{ Site::css('ratings', 'regulus/open-ratings') }}" />
 
-{{-- Comments JS --}}
+{{-- Ratings JS --}}
 <script type="text/javascript">
 	if (baseURL == undefined) var baseURL = "{{ URL::to('') }}";
 
 	var commentLabels   = {{ json_encode(Lang::get('open-ratings::labels')) }};
-	var commentMessages = {{ json_encode(Lang::get('open-comments::messages')) }};
+	var commentMessages = {{ json_encode(Lang::get('open-ratings::messages')) }};
 
 	@if (!is_null(Site::get('contentID')) && !is_null(Site::get('contentType')))
 		var contentID   = "{{ Site::get('contentID') }}";
@@ -48,6 +48,8 @@ $active  = true;
 		if (contentType == undefined) var contentType = "";
 	@endif
 </script>
+
+<script type="text/javascript" src="{{ Site::js('ratings', 'regulus/open-ratings') }}"></script>
 
 <div class="rating rating-{{ $active ? 'active' : 'inactive' }}">
 	<h3>{{ $active ? 'Your' : 'Member' }} Rating</h3>
