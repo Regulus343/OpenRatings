@@ -37,8 +37,8 @@ $active  = true;
 <script type="text/javascript">
 	if (baseURL == undefined) var baseURL = "{{ URL::to('') }}";
 
-	var commentLabels   = {{ json_encode(Lang::get('open-ratings::labels')) }};
-	var commentMessages = {{ json_encode(Lang::get('open-ratings::messages')) }};
+	var ratingLabels   = {{ json_encode(Lang::get('open-ratings::labels')) }};
+	var ratingMessages = {{ json_encode(Lang::get('open-ratings::messages')) }};
 
 	@if (!is_null(Site::get('contentID')) && !is_null(Site::get('contentType')))
 		var contentID   = "{{ Site::get('contentID') }}";

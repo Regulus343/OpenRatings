@@ -11,7 +11,7 @@ function saveRating(points) {
 			$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
 		}
 	}
-	$('.rating-active .tip').html('Saving your rating...');
+	$('.rating-active .tip').html(ratingMessages.savingRating);
 	savingRating = true;
 
 	$.ajax({
@@ -35,7 +35,7 @@ function saveRating(points) {
 			savingRating = false;
 		},
 		error: function(){
-			$('.rating-active .tip').html('Select a rating');
+			$('.rating-active .tip').html(ratingMessages.selectRating);
 			$('.rating-active .remove-rating').fadeOut('fast');
 			savingRating = false;
 			console.log('Save Rating Failed');
@@ -45,7 +45,7 @@ function saveRating(points) {
 
 function removeRating() {
 	$('.rating-active .star').removeClass('rate-hover').removeClass('rate-hover-higher').removeClass('full').removeClass('half');
-	$('.rating-active .tip').html('Removing your rating...');
+	$('.rating-active .tip').html(ratingMessages.removingRating);
 
 	$.ajax({
 		url: baseURL + 'ratings/remove',
