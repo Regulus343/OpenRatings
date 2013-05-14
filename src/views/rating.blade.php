@@ -38,6 +38,7 @@ $active  = true;
 	if (baseURL == undefined) var baseURL = "{{ URL::to('') }}";
 
 	var commentLabels   = {{ json_encode(Lang::get('open-ratings::labels')) }};
+	var commentMessages = {{ json_encode(Lang::get('open-comments::messages')) }};
 
 	@if (!is_null(Site::get('contentID')) && !is_null(Site::get('contentType')))
 		var contentID   = "{{ Site::get('contentID') }}";
