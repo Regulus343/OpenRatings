@@ -1,0 +1,27 @@
+{
+	"name": "regulus/open-ratings",
+	"description": "A light, effective user ratings composer package that is easy to configure and implement.",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Cody Jassman",
+			"email": "me@codyjassman.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0",
+		"illuminate/support": "4.0.x",
+		"regulus/solid-site": "dev-master"
+	},
+	"autoload": {
+		"classmap": [
+			"src/controllers",
+			"src/migrations",
+			"src/models"
+		],
+		"psr-0": {
+			"Regulus\\OpenRatings": "src/"
+		}
+	},
+	"minimum-stability": "dev"
+}
