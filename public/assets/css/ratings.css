@@ -1,0 +1,68 @@
+div.rating { clear: right; float: right; margin: 0 0 12px 24px; }
+
+div.rating {
+	position: relative;
+	margin: 0 0 0 12px;
+	padding: 10px;
+	width: 196px;
+	background: #111 url('../img/rating-bg.png') repeat;
+	color: #ccc;
+	border: 1px solid #555;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	box-shadow: 0 0 4px #888;
+}
+div.rating-active { box-shadow: 0 0 4px #fff; }
+div.rating h3 { margin: 0 0 8px 0; color: #aaa; font-size: 16px; }
+div.rating div.stars {
+	float: right;
+	margin: 0 0 5px 0;
+	padding: 4px;
+	background-color: #0d0d0d;
+	border: 1px solid #333;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	box-shadow: 0 1px 2px #555;
+}
+div.rating div.star {
+	float: left;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background: url('../img/rating-star-empty.png') center center no-repeat;
+}
+div.rating-active div.star { cursor: pointer; }
+
+div.rating div.star.zero { display: none; background-image: none; }
+div.rating-active div.star.zero { display: inline-block; }
+
+div.rating div.star.half { background-image: url('../img/rating-star-half.png'); }
+div.rating div.star.full { background-image: url('../img/rating-star-full.png'); }
+
+div.rating-active div.star.rate-hover { background-image: url('../img/rating-star-full.png'); }
+div.rating-active div.star.rate-hover-higher { background-image: url('../img/rating-star-empty.png'); }
+
+div.rating-active div.star.zero:hover, div.rating-active div.star.zero.rate-hover { background-image: url('../img/rating-star-zero.png'); }
+
+div.rating div.tip { clear: left; padding: 8px 0 4px 0; color: #aaa; font-size: 14px; font-weight: bold; text-align: right; }
+
+div.rating div.ratings-number { margin-top: 8px; color: #666; font-size: 11px; font-style: italic; text-align: right; }
+div.rating div.ratings-number a { z-index: 50; position: relative; }
+
+div.rating div.remove-rating {
+	position: absolute;
+	top: 14px; right: 11px;
+	padding: 0 4px 2px 4px;
+	background-color: #700; color: #fff;
+	font-size: 13px;
+	font-weight: bold;
+	cursor: pointer;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+div.rating div.remove-rating:hover {
+	background-color: #900;
+}

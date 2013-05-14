@@ -12,6 +12,18 @@ class OpenRatingsServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('regulus/open-ratings');
+
+		include __DIR__.'/../../routes.php';
+		include __DIR__.'/../../filters.php';
+	}
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void

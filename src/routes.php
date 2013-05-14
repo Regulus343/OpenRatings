@@ -14,7 +14,7 @@
 use Illuminate\Support\Facades\Route;
 
 /* Map Controller */
-Route::controller('ratings', 'Regulus\OpenRatings\RatingsController');
+Route::controller('ratings', 'RatingsController');
 
 /* Set Ajax Filter */
 Route::when('ratings/*', 'ajax');

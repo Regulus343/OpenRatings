@@ -1,4 +1,6 @@
-<?php
+<?php namespace Regulus\OpenRatings;
+
+use \BaseController;
 
 use Regulus\Identify\User;
 use Regulus\Identify\Role;
