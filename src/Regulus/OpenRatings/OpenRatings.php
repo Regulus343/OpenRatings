@@ -5,7 +5,7 @@
 		A light, effective user ratings composer package that is easy to configure and implement.
 
 		created by Cody Jassman
-		last updated on May 13, 2013
+		last updated on May 14, 2013
 ----------------------------------------------------------------------------------------------------------*/
 
 use Illuminate\Support\Facades\Config;
@@ -87,12 +87,12 @@ class OpenRatings {
 	{
 		if (is_null(static::$auth)) {
 			static::$auth = (object) array(
-				'class'              => Config::get('open-comments::authClass'),
-				'methodActiveCheck'  => Config::get('open-comments::authMethodActiveCheck'),
-				'methodActiveUser'   => Config::get('open-comments::authMethodActiveUser'),
-				'methodActiveUserID' => Config::get('open-comments::authMethodActiveUserID'),
-				'methodAdminCheck'   => Config::get('open-comments::authMethodAdminCheck'),
-				'methodAdminRole'    => Config::get('open-comments::authMethodAdminRole'),
+				'class'              => Config::get('open-ratings::authClass'),
+				'methodActiveCheck'  => Config::get('open-ratings::authMethodActiveCheck'),
+				'methodActiveUser'   => Config::get('open-ratings::authMethodActiveUser'),
+				'methodActiveUserID' => Config::get('open-ratings::authMethodActiveUserID'),
+				'methodAdminCheck'   => Config::get('open-ratings::authMethodAdminCheck'),
+				'methodAdminRole'    => Config::get('open-ratings::authMethodAdminRole'),
 			);
 		}
 		return static::$auth;
@@ -103,17 +103,17 @@ class OpenRatings {
 	 *
 	 * @return string
 	 */
-	public static function delete($id)
+	/*public static function delete($id)
 	{
 		$results = array(
 			'resultType' => 'Error',
-			'message'    => Lang::get('open-comments::messages.errorGeneral'),
+			'message'    => Lang::get('open-ratings::messages.errorGeneral'),
 		);
 
 		$comment = Comment::find($id);
 		if (!empty($comment)) {
-			$userID = OpenComments::userID();
-			$admin  = OpenComments::admin();
+			$userID = static::userID();
+			$admin  = static::admin();
 
 			if ($admin || ($userID == $comment->user_id && strtotime($comment->created_at) >= strtotime('-'.Config::get('open-comments::commentWaitTime').' seconds'))) {
 				if ($admin) {
@@ -123,12 +123,12 @@ class OpenRatings {
 						$reply->delete();
 					}
 					$results['resultType'] = "Success";
-					$results['message']    = Lang::get('open-comments::messages.successDeleted');
+					$results['message']    = Lang::get('open-ratings::messages.successDeleted');
 					return $results;
 				} else {
 					$repliesExist = Comment::where('parent_id', '=', $id)->where('deleted', '=', 0)->count();
 					if (!$admin && $repliesExist) {
-						$results['message'] = Lang::get('open-comments::messages.errorDeleteRepliesExist');
+						$results['message'] = Lang::get('open-ratings::messages.errorDeleteRepliesExist');
 					}
 
 					$dateDeleted = date('Y-m-d H:i:s');
@@ -142,9 +142,9 @@ class OpenRatings {
 				return $results;
 			}
 		}
-		$results['message'] = Lang::get('open-comments::messages.successDeleted');
+		$results['message'] = Lang::get('open-ratings::messages.successDeleted');
 		return $results;
-	}
+	}*/
 
 	/**
 	 * Separates a function string "function('array')" into the

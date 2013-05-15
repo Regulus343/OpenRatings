@@ -132,13 +132,13 @@ class Rating extends Eloquent {
 			'action'     => 'Create',
 			'ratingID'   => false,
 			'points'     => Input::get('points'),
-			'message'    => Lang::get('open-ratings::messages.errorGeneral'),
+			'message'    => Lang::get('open-ratings::messages.error'),
 		);
 
 		//ensure user is logged in
 		if (!OpenRatings::auth()) return $results;
 
-		$userID      = OpenComments::userID();
+		$userID      = OpenRatings::userID();
 		$contentID   = trim(Input::get('content_id'));
 		$contentType = trim(Input::get('content_type'));
 		$points      = $results['points'];
@@ -164,52 +164,40 @@ class Rating extends Eloquent {
 			->where('user_id', '=', $userID)
 			->where('content_id', '=', $contentID)
 			->where('content_type', '=', $contentType)
-			->find();
+			->first();
 
 		if ($rating) {
 			$id = $rating->id;
+			$results['action'] = "Update";
 		} else {
 			$id = 0;
 			$rating = new static;
 			$rating->user_id = $userID;
+			$rating->content_id   = $contentID;
+			$rating->content_type = $contentType;
+			$rating->ip_address = Request::getClientIp();
 		}
 
-		if ($results['action'] == "Create") {
-			$comment->content_id   = $contentID;
-			$comment->content_type = $contentType;
-			$comment->parent_id    = $parentID;
-			$comment->ip_address   = Request::getClientIp();
-		}
-		$comment->comment = $commentText;
-		$comment->save();
+		$rating->points = $points;
+		$rating->save();
 
-		$results['commentID'] = $comment->id;
-
-		//add order ID for easy comment ordering for queries
-		if ($results['action'] == "Create") {
-			if ($parentID) {
-				$comment->order_id = $parentID;
-			} else {
-				$comment->order_id = $comment->id;
-			}
-			$comment->save();
-
-			Session::set('lastComment', $comment->id);
-		}
-
+		$results['ratingID']   = $rating->id;
 		$results['resultType'] = "Success";
-		if ($results['action'] == "Create") {
-			$results['message'] = Lang::get('open-comments::messages.successCreated');
-			if (!$autoApproval) $results['message'] .= ' '.Lang::get('open-comments::messages.notYetApproved');
-		} else {
-			$results['message'] = Lang::get('open-comments::messages.successUpdated');
-		}
+		$results['message']    = Lang::get('open-ratings::messages.success');
 
-		//set the comment totals for the model declared by the content type if feature is enabled
-		if ($allowedContentTypes && is_array($allowedContentTypes) && Config::get('open-comments::setCommentTotals')) {
-			$totalComments = static::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->count();
+		//set the average rating for the model declared by the content type if feature is enabled
+		if ($allowedContentTypes && is_array($allowedContentTypes) && Config::get('open-ratings::setContentRating')) {
+			$ratings = static::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->get();
+			$totalRatings  = 0;
+			$totalPoints   = 0;
+			$averageRating = 0;
+			foreach ($ratings as $rating) {
+				$totalRatings ++;
+				$totalPoints  += $rating->points;
+			}
+			$averageRating = number_format($totalPoints / $totalRatings, Config::get('open-ratings::ratingDecimals'), '.', '');
 
-			DB::table($allowedContentTypes[$contentType])->where('id', '=', $contentID)->update(array('comments' => $totalComments));
+			DB::table($allowedContentTypes[$contentType])->where('id', '=', $contentID)->update(array('rating' => $averageRating));
 		}
 
 		//log activity

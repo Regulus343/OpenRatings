@@ -101,7 +101,7 @@ return array(
 	| Set Comments Totals For Objects
 	|--------------------------------------------------------------------------
 	|
-	| If true, this will save the current rating to a "ratings" field in the
+	| If true, this will save the current rating to a "rating" field in the
 	| content type / table pairs declared in Allowed Content Types above.
 	|
 	*/

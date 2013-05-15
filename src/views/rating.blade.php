@@ -1,11 +1,4 @@
-<?php
-//$rating  = $materialsItem->getRating();
-//$ratings = $materialsItem->getRatingsNumber();
-
-$rating  = 3;
-$ratings = 2;
-$active  = true;
-?>
+<?php $active = Regulus\OpenRatings\OpenRatings::auth(); ?>
 
 {{-- Load jQuery --}}
 @if (Config::get('open-ratings::loadJquery'))
@@ -55,15 +48,15 @@ $active  = true;
 	<h3>{{ $active ? 'Your' : 'Member' }} Rating</h3>
 
 	@if ($active)
-		<div class="remove-rating{{ !$rating ? ' hidden' : '' }}">x</div>
+		<div class="remove-rating">x</div>
 	@endif
 
 	<div class="stars">
-		<div id="star0" class="star zero{{ ($rating != "" && $rating == 0) ? ' rate-hover' : '' }}"></div>
+		<div id="star0" class="star zero"></div>
 
 		@for ($r = 1; $r <= Config::get('open-ratings::ratingMax'); $r++)
 
-			<?php if ($active) {
+			<?php /*if ($active) {
 				$class = '';
 			} else {
 				$class = ' star'.$r;
@@ -72,9 +65,9 @@ $active  = true;
 				$class .= ' full';
 			} else if ($rating >= ($r - 0.5) && $rating < $r) {
 				$class .= ' half';
-			} ?>
+			}*/ ?>
 
-			<div{{ $active ? ' id="star'.$r.'"' : '' }} class="star{{ $class }}"></div>
+			<div id="star{{ $r }}" class="star"></div>
 
 		@endfor
 
@@ -82,20 +75,15 @@ $active  = true;
 	<div class="clear"></div>
 
 	<div class="tip">
-		@if ($rating)
-			{{ $rating }} out of 5
+		@if ($active)
+			Select a rating
 		@else
-			@if ($active)
-				Select a rating
-			@else
-				Unrated
-			@endif
+			Unrated
 		@endif
 	</div><!-- /tip -->
 
-	@if ($ratings)
-		<div class="ratings-number">
-			Rated by <a href="" title="View individual member ratings"><strong>{{ $ratings }}</strong> members</a>
-		</div>
-	@endif
+	<div class="ratings-number">
+		Rated by <a href="" title="View individual member ratings"><strong>0</strong> members</a>
+	</div>
+
 </div><!-- /rating -->

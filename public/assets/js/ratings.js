@@ -75,36 +75,39 @@ function removeRating() {
 	});
 }
 
-function reloadMemberRating() {
+function getUserRating(id) {
 	$.ajax({
-		url: baseURL + 'ratings/member',
+		url: baseURL + 'ratings/user',
 		type: 'post',
-		data: { 'content_id': contentID, 'content_type': contentType },
+		data: { 'content_id': id, 'content_type': contentType },
 		dataType: 'json',
-		success: function(data){
-			if (data.rating != "") {
-				$('.rating-inactive .tip').html(data.rating+' out of 5');
+		success: function(results){
+			if (results.points != "UNRATED") {
+				$('.rating .tip').html(results.points+' out of 5');
 				for (r=1; r <= 5; r++) {
-					if (data.rating >= r) {
-						$('.rating-inactive .star'+r).removeClass('half').addClass('full');
-					} else if (data.rating >= (r - 0.5) && data.rating < r) {
-						$('.rating-inactive .star'+r).removeClass('full').addClass('half');
+					if (results.points >= r) {
+						$('.rating .star'+r).removeClass('half').addClass('full');
+					} else if (results.points >= (r - 0.5) && results.points < r) {
+						$('.rating .star'+r).removeClass('full').addClass('half');
 					} else {
-						$('.rating-inactive .star'+r).removeClass('half').removeClass('full');
+						$('.rating .star'+r).removeClass('half').removeClass('full');
 					}
 				}
 			} else {
-				$('.rating-inactive .tip').html('Unrated');
+				$('.rating .tip').html('Unrated');
 				for (r=1; r <= 5; r++) {
-					$('.rating-inactive .star'+r).removeClass('half').removeClass('full');
+					$('.rating .star'+r).removeClass('half').removeClass('full');
 				}
 			}
-			if (data.member_ratings != "") $('.rating-inactive .ratings-number strong').html(data.member_ratings);
+			if (results.ratings != "") $('.rating .ratings-number strong').html(results.ratings);
 		}
 	});
 }
 
 $(document).ready(function(){
+
+	//get current user rating for selected content
+	if (contentID) getUserRating(contentID);
 
 	$('.rating-active div.star').hover(function(){
 		if (!savingRating) {

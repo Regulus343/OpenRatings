@@ -2,7 +2,8 @@
 
 return array(
 
-	'errorGeneral'   => 'Something went wrong. Please try again.',
+	'error'          => 'Rating could not be saved.',
+	'success'        => 'Rating saved.',
 
 	'selectRating'   => 'Select a rating',
 	'savingRating'   => 'Saving your rating...',

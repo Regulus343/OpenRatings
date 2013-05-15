@@ -19,4 +19,29 @@ class RatingsController extends BaseController {
 		return json_encode(Rating::createUpdate());
 	}
 
+	public function postUser()
+	{
+		$contentID   = Input::get('content_id');
+		$contentType = Input::get('content_type');
+		$ratings     = $rating = Rating::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->count();
+		$results = array(
+			'points'  => "UNRATED",
+			'ratings' => $ratings,
+		);
+
+		$userID = OpenRatings::userID();
+		if ($userID) {
+			$rating = Rating::where('user_id', '=', $userID)
+				->where('content_id', '=', $contentID)
+				->where('content_type', '=', $contentType)
+				->first();
+			if (!empty($rating)) {
+				$results['points'] = $rating->points;
+			} else {
+				$results['points'] = 0;
+			}
+		}
+		return json_encode($results);
+	}
+
 }

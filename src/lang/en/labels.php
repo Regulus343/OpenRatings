@@ -9,7 +9,4 @@ return array(
 	'member'        => 'Member',
 	'star'          => 'Star',
 
-	'error'         => 'Rating could not be saved',
-	'saved'         => 'Rating saved',
-
 );
