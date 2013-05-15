@@ -1,9 +1,9 @@
-div.rating { clear: right; float: right; margin: 0 0 12px 24px; }
-
 div.rating {
 	position: relative;
-	margin: 0 0 12px 12px;
-	padding: 10px;
+	clear: right;
+	float: right;
+	margin: 0 0 12px 24px;
+	padding: 12px;
 	width: 196px;
 	background-color: #111;
 	color: #ccc;
@@ -14,7 +14,7 @@ div.rating {
 	box-shadow: 0 0 4px #888;
 }
 div.rating-active { box-shadow: 0 0 4px #fff; }
-div.rating h3 { margin: 0 0 8px 0; color: #aaa; font-size: 16px; }
+div.rating h3 { margin: 0 0 8px 0; padding: 3px 0; color: #aaa; font-size: 16px; line-height: 1em; }
 div.rating div.stars {
 	float: right;
 	margin: 0 0 5px 0;
@@ -53,15 +53,15 @@ div.rating div.ratings-number a { z-index: 50; position: relative; }
 
 div.rating div.remove-rating {
 	position: absolute;
-	top: 14px; right: 11px;
-	padding: 0 5px;
+	top: 10px; right: 12px;
+	padding: 1px 5px 3px 5px;
 	background-color: #700; color: #fff;
-	font-size: 13px;
+	border: 1px solid #080808;
+	border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;
+	font-size: 15px;
 	font-weight: bold;
+	line-height: 1em;
 	cursor: pointer;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
 }
 div.rating div.remove-rating:hover {
 	background-color: #900;

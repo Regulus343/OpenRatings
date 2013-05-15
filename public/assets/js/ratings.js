@@ -93,16 +93,17 @@ function getRating(id) {
 
 function displayRatings() {
 	//set user rating
+	console.log(rating);
 	if (rating == 0 && rating != "") {
 		$('.rating-active #star0').removeClass('rate-hover-higher').addClass('rate-hover');
 	} else {
 		$('.rating-active #star0').removeClass('rate-hover').addClass('rate-hover-higher');
-		for (r=1; r <= ratingMax; r++) {
-			if (rating >= r) {
-				$('.rating-active #star'+r).removeClass('rate-hover-higher').addClass('rate-hover');
-			} else {
-				$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
-			}
+	}
+	for (r=1; r <= ratingMax; r++) {
+		if (rating >= r) {
+			$('.rating-active #star'+r).removeClass('rate-hover-higher').addClass('rate-hover');
+		} else {
+			$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
 		}
 	}
 
