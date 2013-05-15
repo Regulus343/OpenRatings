@@ -54,7 +54,7 @@ div.rating div.ratings-number a { z-index: 50; position: relative; }
 div.rating div.remove-rating {
 	position: absolute;
 	top: 14px; right: 11px;
-	padding: 0 4px 2px 4px;
+	padding: 0 5px;
 	background-color: #700; color: #fff;
 	font-size: 13px;
 	font-weight: bold;

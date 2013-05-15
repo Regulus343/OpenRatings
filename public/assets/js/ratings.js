@@ -18,8 +18,9 @@ function saveRating(points) {
 		url: baseURL + 'ratings/save',
 		type: 'post',
 		data: { 'content_id': contentID, 'content_type': contentType, 'points': points },
-		success: function(data){
-			if (data == "Success") {
+		dataType: 'json',
+		success: function(results){
+			if (results.resultType == "Success") {
 				$('.rating-active .tip').html(points+' out of 5');
 				$('.rating-active .remove-rating').fadeIn('fast');
 				rating = points;
@@ -83,17 +84,19 @@ function getUserRating(id) {
 		dataType: 'json',
 		success: function(results){
 			if (results.points != "UNRATED") {
+				rating = results.points;
 				$('.rating .tip').html(results.points+' out of 5');
 				for (r=1; r <= 5; r++) {
-					if (results.points >= r) {
+					if (rating >= r) {
 						$('.rating .star'+r).removeClass('half').addClass('full');
-					} else if (results.points >= (r - 0.5) && results.points < r) {
+					} else if (rating >= (r - 0.5) && results.points < r) {
 						$('.rating .star'+r).removeClass('full').addClass('half');
 					} else {
 						$('.rating .star'+r).removeClass('half').removeClass('full');
 					}
 				}
 			} else {
+				rating = "";
 				$('.rating .tip').html('Unrated');
 				for (r=1; r <= 5; r++) {
 					$('.rating .star'+r).removeClass('half').removeClass('full');
