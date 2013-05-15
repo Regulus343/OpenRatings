@@ -178,6 +178,9 @@ class Rating extends Eloquent {
 			$rating->ip_address = Request::getClientIp();
 		}
 
+		$max = Config::get('open-ratings::ratingMax');
+		if ($points > $max) $points = $max;
+
 		$rating->points = $points;
 		$rating->save();
 
@@ -188,16 +191,9 @@ class Rating extends Eloquent {
 		//set the average rating for the model declared by the content type if feature is enabled
 		if ($allowedContentTypes && is_array($allowedContentTypes) && Config::get('open-ratings::setContentRating')) {
 			$ratings = static::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->get();
-			$totalRatings  = 0;
-			$totalPoints   = 0;
-			$averageRating = 0;
-			foreach ($ratings as $rating) {
-				$totalRatings ++;
-				$totalPoints  += $rating->points;
-			}
-			$averageRating = number_format($totalPoints / $totalRatings, Config::get('open-ratings::ratingDecimals'), '.', '');
+			$ratingsData = OpenRatings::ratingsData($ratings);
 
-			DB::table($allowedContentTypes[$contentType])->where('id', '=', $contentID)->update(array('rating' => $averageRating));
+			DB::table($allowedContentTypes[$contentType])->where('id', '=', $contentID)->update(array('rating' => $ratingsData['pointsAverage']));
 		}
 
 		//log activity

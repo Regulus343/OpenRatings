@@ -2,7 +2,7 @@ div.rating { clear: right; float: right; margin: 0 0 12px 24px; }
 
 div.rating {
 	position: relative;
-	margin: 0 0 0 12px;
+	margin: 0 0 12px 12px;
 	padding: 10px;
 	width: 196px;
 	background-color: #111;

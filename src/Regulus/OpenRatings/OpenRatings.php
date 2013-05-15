@@ -98,6 +98,23 @@ class OpenRatings {
 		return static::$auth;
 	}
 
+	public static function ratingsData($ratings)
+	{
+		$results = array(
+			'pointsTotal'   => 0,
+			'ratingsTotal'  => 0,
+			'pointsAverage' => 0,
+		);
+		foreach ($ratings as $rating) {
+			$results['pointsTotal']  += $rating->points;
+			$results['ratingsTotal'] ++;
+		}
+		if ($results['ratingsTotal'] > 0) {
+			$results['pointsAverage'] = number_format($results['pointsTotal'] / $results['ratingsTotal'], Config::get('open-ratings::ratingDecimals'), '.', '');
+		}
+		return $results;
+	}
+
 	/**
 	 * Delete a rating.
 	 *

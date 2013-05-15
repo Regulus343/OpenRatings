@@ -24,7 +24,7 @@ function saveRating(points) {
 				$('.rating-active .tip').html(points+' out of 5');
 				$('.rating-active .remove-rating').fadeIn('fast');
 				rating = points;
-				reloadMemberRating();
+				getRating(contentID);
 			} else {
 				if (rating == "") {
 					$('.rating-active .tip').html('Select a rating');
@@ -45,102 +45,116 @@ function saveRating(points) {
 }
 
 function removeRating() {
-	$('.rating-active .star').removeClass('rate-hover').removeClass('rate-hover-higher').removeClass('full').removeClass('half');
 	$('.rating-active .tip').html(ratingMessages.removingRating);
 
 	$.ajax({
 		url: baseURL + 'ratings/remove',
 		type: 'post',
 		data: { 'content_id': contentID, 'content_type': contentType },
-		success: function(data){
-			if (data == "Success") {
-				$('.rating-active .tip').html('Select a rating');
-				$('.rating-active .remove-rating').fadeOut('fast');
+		success: function(result){
+			savingRating = false;
+			if (result == "Success") {
 				rating = "";
-				reloadMemberRating();
-			} else {
-				if (rating == "") {
-					$('.rating-active .tip').html('Select a rating');
-					$('.rating-active .remove-rating').fadeOut('fast');
-				} else {
-					$('.rating-active .tip').html(rating+' out of 5');
-				}
+				$('.rating-active .star').removeClass('rate-hover').removeClass('rate-hover-higher').removeClass('full').removeClass('half');
 			}
+			getRating(contentID);
 		},
 		error: function(){
-			$('.rating-active .tip').html('Select a rating');
-			$('.rating-active .remove-rating').fadeOut('fast');
 			savingRating = false;
 			console.log('Remove Rating Failed');
 		}
 	});
 }
 
-function getUserRating(id) {
+function getRating(id) {
 	$.ajax({
-		url: baseURL + 'ratings/user',
+		url: baseURL + 'ratings/get',
 		type: 'post',
 		data: { 'content_id': id, 'content_type': contentType },
 		dataType: 'json',
 		success: function(results){
-			if (results.points != "UNRATED") {
-				rating = results.points;
-				$('.rating .tip').html(results.points+' out of 5');
-				for (r=1; r <= 5; r++) {
-					if (rating >= r) {
-						$('.rating .star'+r).removeClass('half').addClass('full');
-					} else if (rating >= (r - 0.5) && results.points < r) {
-						$('.rating .star'+r).removeClass('full').addClass('half');
-					} else {
-						$('.rating .star'+r).removeClass('half').removeClass('full');
-					}
-				}
+			if (results.pointsUser != "UNRATED") {
+				rating = results.pointsUser;
 			} else {
 				rating = "";
-				$('.rating .tip').html('Unrated');
-				for (r=1; r <= 5; r++) {
-					$('.rating .star'+r).removeClass('half').removeClass('full');
-				}
 			}
+
+			if (results.pointsAverage != "UNRATED") {
+				ratingAverage = results.pointsAverage;
+			} else {
+				ratingAverage = "";
+			}
+
+			displayRatings();
 			if (results.ratings != "") $('.rating .ratings-number strong').html(results.ratings);
 		}
 	});
 }
 
+function displayRatings() {
+	//set user rating
+	if (rating == 0 && rating != "") {
+		$('.rating-active #star0').removeClass('rate-hover-higher').addClass('rate-hover');
+	} else {
+		$('.rating-active #star0').removeClass('rate-hover').addClass('rate-hover-higher');
+		for (r=1; r <= ratingMax; r++) {
+			if (rating >= r) {
+				$('.rating-active #star'+r).removeClass('rate-hover-higher').addClass('rate-hover');
+			} else {
+				$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
+			}
+		}
+	}
+
+	if (rating === "") {
+		$('.rating-active .tip').html(ratingMessages.selectRating);
+		$('.rating-active .remove-rating').fadeOut('fast');
+	} else {
+		$('.rating-active .tip').html(rating+' out of '+ratingMax);
+	}
+
+	//set average member rating
+	for (r=1; r <= ratingMax; r++) {
+		if (ratingAverage >= r) {
+			$('.rating-inactive .star'+r).removeClass('half').addClass('full');
+		} else if (ratingAverage >= (r - 0.5) && ratingAverage < r) {
+			$('.rating-inactive .star'+r).removeClass('full').addClass('half');
+		} else {
+			$('.rating-inactive .star'+r).removeClass('full').removeClass('half');
+		}
+	}
+
+	if (ratingAverage === "") {
+		$('.rating-inactive .tip').html(ratingMessages.unrated);
+	} else {
+		$('.rating-inactive .tip').html(ratingAverage+' out of '+ratingMax);
+	}
+
+}
+
 $(document).ready(function(){
 
-	//get current user rating for selected content
-	if (contentID) getUserRating(contentID);
+	//get current rating for selected content
+	if (contentID) getRating(contentID);
 
 	$('.rating-active div.star').hover(function(){
 		if (!savingRating) {
 			var ratingPoints = parseInt($(this).attr('id').replace('star', ''));
-			for (r=1; r <= 5; r++) {
+			for (r=1; r <= ratingMax; r++) {
 				if (ratingPoints >= r) {
 					$('.rating-active #star'+r).removeClass('rate-hover-higher').addClass('rate-hover');
 				} else {
 					$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
 				}
 			}
-			$('.rating-active .tip').html('Rate <strong>'+ratingPoints+' out of 5</strong>');
+			$('.rating-active .tip').html('Rate <strong>'+ratingPoints+' out of '+ratingMax+'</strong>');
 		}
 	}).click(function(){
 		var ratingPoints = parseInt($(this).attr('id').replace('star', ''));
 		saveRating(ratingPoints);
 	}).mouseleave(function(){
 		if (!savingRating) {
-			for (r=1; r <= 5; r++) {
-				if (rating >= r) {
-					$('.rating-active #star'+r).removeClass('rate-hover-higher').addClass('rate-hover');
-				} else {
-					$('.rating-active #star'+r).removeClass('rate-hover').addClass('rate-hover-higher');
-				}
-			}
-			if (rating === "") {
-				$('.rating-active .tip').html('Select a rating');
-			} else {
-				$('.rating-active .tip').html(rating+' out of 5');
-			}
+			displayRatings();
 		}
 	});
 

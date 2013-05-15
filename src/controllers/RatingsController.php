@@ -19,15 +19,10 @@ class RatingsController extends BaseController {
 		return json_encode(Rating::createUpdate());
 	}
 
-	public function postUser()
+	public function postRemove()
 	{
 		$contentID   = Input::get('content_id');
 		$contentType = Input::get('content_type');
-		$ratings     = $rating = Rating::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->count();
-		$results = array(
-			'points'  => "UNRATED",
-			'ratings' => $ratings,
-		);
 
 		$userID = OpenRatings::userID();
 		if ($userID) {
@@ -36,9 +31,36 @@ class RatingsController extends BaseController {
 				->where('content_type', '=', $contentType)
 				->first();
 			if (!empty($rating)) {
-				$results['points'] = $rating->points;
-			} else {
-				$results['points'] = 0;
+				$rating->delete();
+				return "Success";
+			}
+		}
+		return "Error";
+	}
+
+	public function postGet()
+	{
+		$contentID   = Input::get('content_id');
+		$contentType = Input::get('content_type');
+		$ratings     = $rating = Rating::where('content_id', '=', $contentID)->where('content_type', '=', $contentType)->get();
+		$ratingsData = OpenRatings::ratingsData($ratings);
+		$results = array(
+			'pointsUser'    => "UNRATED",
+			'pointsAverage' => "UNRATED",
+			'ratings'       => $ratingsData['ratingsTotal'],
+		);
+		if ($ratingsData['ratingsTotal'] > 0) {
+			$results['pointsAverage'] = $ratingsData['pointsAverage'];
+		}
+
+		$userID = OpenRatings::userID();
+		if ($userID) {
+			$rating = Rating::where('user_id', '=', $userID)
+				->where('content_id', '=', $contentID)
+				->where('content_type', '=', $contentType)
+				->first();
+			if (!empty($rating)) {
+				$results['pointsUser'] = $rating->points;
 			}
 		}
 		return json_encode($results);
