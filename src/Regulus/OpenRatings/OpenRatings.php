@@ -5,11 +5,12 @@
 		A light, effective user ratings composer package that is easy to configure and implement.
 
 		created by Cody Jassman
-		last updated on May 14, 2013
+		last updated on May 15, 2013
 ----------------------------------------------------------------------------------------------------------*/
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
 
 class OpenRatings {
 
@@ -98,6 +99,11 @@ class OpenRatings {
 		return static::$auth;
 	}
 
+	/**
+	 * Get the current average rating, the total number of points, and the total number of ratings for a content items.
+	 *
+	 * @return array
+	 */
 	public static function ratingsData($ratings)
 	{
 		$results = array(
@@ -116,52 +122,19 @@ class OpenRatings {
 	}
 
 	/**
-	 * Delete a rating.
+	 * Get the HTML text for a rating for use in lists of content items.
 	 *
+	 * @param  mixed    $rating
+	 * @param  integer  $ratings
 	 * @return string
 	 */
-	/*public static function delete($id)
+	public static function listedRatingHTML($rating = 'UNRATED', $ratings = 0)
 	{
-		$results = array(
-			'resultType' => 'Error',
-			'message'    => Lang::get('open-ratings::messages.errorGeneral'),
-		);
-
-		$comment = Comment::find($id);
-		if (!empty($comment)) {
-			$userID = static::userID();
-			$admin  = static::admin();
-
-			if ($admin || ($userID == $comment->user_id && strtotime($comment->created_at) >= strtotime('-'.Config::get('open-comments::commentWaitTime').' seconds'))) {
-				if ($admin) {
-					$comment->delete();
-					$replies = Comment::where('parent_id', '=', $id)->get();
-					foreach ($replies as $reply) {
-						$reply->delete();
-					}
-					$results['resultType'] = "Success";
-					$results['message']    = Lang::get('open-ratings::messages.successDeleted');
-					return $results;
-				} else {
-					$repliesExist = Comment::where('parent_id', '=', $id)->where('deleted', '=', 0)->count();
-					if (!$admin && $repliesExist) {
-						$results['message'] = Lang::get('open-ratings::messages.errorDeleteRepliesExist');
-					}
-
-					$dateDeleted = date('Y-m-d H:i:s');
-					$comment->deleted    = true;
-					$comment->deleted_at = $dateDeleted;
-					$comment->save();
-
-					Comment::where('parent_id', '=', $id)->update(array('deleted' => true, 'deleted_at' => $dateDeleted));
-				}
-			} else {
-				return $results;
-			}
-		}
-		$results['message'] = Lang::get('open-ratings::messages.successDeleted');
-		return $results;
-	}*/
+		return View::make(Config::get('open-ratings::viewsLocation').'partials.average_rating')
+			->with('rating', $rating)
+			->with('ratings', $ratings)
+			->render();
+	}
 
 	/**
 	 * Separates a function string "function('array')" into the
