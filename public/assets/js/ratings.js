@@ -20,8 +20,9 @@ function saveRating(points) {
 		data: { 'content_id': contentID, 'content_type': contentType, 'points': points },
 		dataType: 'json',
 		success: function(results){
+			var currentRatingText = ratingLabels.currentRating.replace(':current', points).replace(':max', ratingMax);
 			if (results.resultType == "Success") {
-				$('.rating-active .tip').html(points+' out of 5');
+				$('.rating-active .tip').html(currentRatingText);
 				$('.rating-active .remove-rating').fadeIn('fast');
 				rating = points;
 				getRating(contentID);
@@ -30,7 +31,7 @@ function saveRating(points) {
 					$('.rating-active .tip').html('Select a rating');
 					$('.rating-active .remove-rating').fadeOut('fast');
 				} else {
-					$('.rating-active .tip').html(rating+' out of 5');
+					$('.rating-active .tip').html(currentRatingText);
 				}
 			}
 			savingRating = false;
@@ -111,7 +112,8 @@ function displayRatings() {
 		$('.rating-active .tip').html(ratingMessages.selectRating);
 		$('.rating-active .remove-rating').fadeOut('fast');
 	} else {
-		$('.rating-active .tip').html(rating+' out of '+ratingMax);
+		var currentRatingText = ratingLabels.currentRating.replace(':current', rating).replace(':max', ratingMax);
+		$('.rating-active .tip').html(currentRatingText);
 	}
 
 	//set average member rating
@@ -128,7 +130,8 @@ function displayRatings() {
 	if (ratingAverage === "") {
 		$('.rating-inactive .tip').html(ratingMessages.unrated);
 	} else {
-		$('.rating-inactive .tip').html(ratingAverage+' out of '+ratingMax);
+		var currentRatingText = ratingLabels.currentRating.replace(':current', ratingAverage).replace(':max', ratingMax);
+		$('.rating-inactive .tip').html(currentRatingText);
 	}
 
 }
