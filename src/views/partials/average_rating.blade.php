@@ -21,7 +21,7 @@
 	<div class="clear"></div>
 
 	<div class="tip">
-		{{{ $rating != "UNRATED" ? Lang::get('open-ratings::labels.currentRating', array('current' => $rating, 'max' => Config::get('open-ratings::ratingMax'))) : '' }}}
+		{{{ $rating != "UNRATED" ? Lang::get('open-ratings::labels.currentRating', array('current' => $rating, 'max' => Config::get('open-ratings::ratingMax'))) : Lang::get('open-ratings::messages.unrated') }}}
 	</div><!-- /tip -->
 
 	<div class="ratings-number">

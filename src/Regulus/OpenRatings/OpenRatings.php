@@ -130,6 +130,7 @@ class OpenRatings {
 	 */
 	public static function listedRatingHTML($rating = 'UNRATED', $ratings = 0)
 	{
+		if (!$ratings) $rating = "UNRATED";
 		return View::make(Config::get('open-ratings::viewsLocation').'partials.average_rating')
 			->with('rating', $rating)
 			->with('ratings', $ratings)
