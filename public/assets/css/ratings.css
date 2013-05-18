@@ -1,3 +1,9 @@
+div.ratings-container {
+	position: relative;
+	clear: right;
+	float: right;
+}
+
 div.rating {
 	position: relative;
 	clear: right;
